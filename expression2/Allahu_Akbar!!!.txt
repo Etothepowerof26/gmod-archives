@@ -1,0 +1,19 @@
+@name Allahu Akbar!!!
+@inputs 
+@outputs 
+@persist 
+@trigger 
+runOnTick(1)
+
+
+
+Me = owner()
+
+
+
+    concmd("say e")
+    timer("Boom",1500)
+
+if(clk("Boom")){
+    propSpawn("models/props_c17/oildrum001_explosive.mdl",Me:pos(),0):propBreak()
+}

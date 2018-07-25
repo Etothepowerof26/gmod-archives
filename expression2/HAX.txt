@@ -1,0 +1,45 @@
+@name HAX
+@persist Hax:array A4 [Vec1 Vec2 Vec3 Vec4 Vec5]:vector Origin:vector Switch OldSound Sound
+runOnTick(1)
+runOnLast(1)
+if(first()|duped()){owner():soundPlay(21,0,"vo/npc/male01/herecomehacks01.wav")}
+function replace1(Ent:entity,Index){Hax:remove(Index) Hax:insertEntity(Index,Ent)}
+if(last()){foreach(A1,E1:entity=Hax){E1:propDelete()}}
+if(first()|duped()){for(I=1,20,1){Hax:pushEntity(noentity())}}
+Origin=owner():pos()+owner():forward()*40+vec(0,0,40)
+if(owner():keyUse()){
+    if(!A4){A4=1
+        Ang=owner():eyeAngles()
+        E1=propSpawn("models/props_lab/monitor01a.mdl",Origin,Ang,0)
+        E1:propGravity(0)
+        A2=0 A3=0
+        while(!A2&A3<10){A3++ if(!Hax[A3,entity]:isValid()){A2=A3}} if(!A2){Hax[1,entity]:propDelete() replace1(Hax[20,entity],1) replace1(E1,20) stoptimer("a1") stoptimer("a20") timer("a20",5000)}else{replace1(E1,A2) timer("a"+A2,5000)}
+        if(!A2){E1:propDelete()}else{replace1(E1,A2) timer("a"+A2,5000)}
+        E1:setAng(Ang)
+        E1:applyForce((owner():aimPos()-E1:pos()):normalized()*9999*E1:mass())
+        #soundStop(OldSound)
+        #OldSound=A2
+        Sound++
+        owner():soundPlay(Sound,4,"vo/npc/male01/hacks01.wav")
+    }
+}elseif(A4){A4=0}
+if(clk("a1")){Hax[1,entity]:propDelete() replace1(noentity(),1)}
+if(clk("a2")){Hax[2,entity]:propDelete() replace1(noentity(),2)}
+if(clk("a3")){Hax[3,entity]:propDelete() replace1(noentity(),3)}
+if(clk("a4")){Hax[4,entity]:propDelete() replace1(noentity(),4)}
+if(clk("a5")){Hax[5,entity]:propDelete() replace1(noentity(),5)}
+if(clk("a6")){Hax[6,entity]:propDelete() replace1(noentity(),6)}
+if(clk("a7")){Hax[7,entity]:propDelete() replace1(noentity(),7)}
+if(clk("a8")){Hax[8,entity]:propDelete() replace1(noentity(),8)}
+if(clk("a9")){Hax[9,entity]:propDelete() replace1(noentity(),9)}
+if(clk("a10")){Hax[10,entity]:propDelete() replace1(noentity(),10)}
+if(clk("a11")){Hax[11,entity]:propDelete() replace1(noentity(),11)}
+if(clk("a12")){Hax[12,entity]:propDelete() replace1(noentity(),12)}
+if(clk("a13")){Hax[13,entity]:propDelete() replace1(noentity(),13)}
+if(clk("a14")){Hax[14,entity]:propDelete() replace1(noentity(),14)}
+if(clk("a15")){Hax[15,entity]:propDelete() replace1(noentity(),15)}
+if(clk("a16")){Hax[16,entity]:propDelete() replace1(noentity(),16)}
+if(clk("a17")){Hax[17,entity]:propDelete() replace1(noentity(),17)}
+if(clk("a18")){Hax[18,entity]:propDelete() replace1(noentity(),18)}
+if(clk("a19")){Hax[19,entity]:propDelete() replace1(noentity(),19)}
+if(clk("a20")){Hax[20,entity]:propDelete() replace1(noentity(),20)}

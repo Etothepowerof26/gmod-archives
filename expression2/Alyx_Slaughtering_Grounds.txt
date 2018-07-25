@@ -1,0 +1,11 @@
+@name Alyx Slaughtering Grounds
+@inputs ButtonInput Force
+@outputs DoSpawn
+@persist 
+@trigger
+
+if (ButtonInput == 1) {
+    DoSpawn = 1   
+} else {
+    DoSpawn = 0
+}

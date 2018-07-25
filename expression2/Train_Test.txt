@@ -1,0 +1,27 @@
+@name Train Test
+#Ranger Distances
+@inputs [RU]:number [LU]:number [RD]:number [LD]:number
+@inputs [W]:number
+
+@outputs 
+
+@persist [F]:entity
+
+@trigger 
+
+if (first() || dupefinished()) {
+    F = entity():isWeldedTo()
+    
+    runOnTick(1)   
+}
+
+if (F:isValid()) {
+    Temp=F
+    Entity=(Temp:getConstraints():count( ) > 0 ? Temp:isWeldedTo() : Temp)
+    Angle=-Entity:angles()*15-Entity:angVel()*2,Center=Entity:massCenter()
+    Right=Entity:right(),Forward=Entity:forward(),Up=Entity:up()
+    Entity:applyForce((vec(0,0,9.015)-Entity:vel())*Entity:mass())
+    Leverage=Entity:inertia():length()
+    
+    Entity:applyAngForce(Angle*Leverage)
+}

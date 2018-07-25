@@ -1,0 +1,163 @@
+@name Parkour
+@persist E:entity Go [TargetVel Vel]:vector Duck OldDuck Wall WallClimbVel WallJump WallJumpReady Ground
+@persist Space Ref:entity
+@persist WallRun Distance WallRunGround LedgeGrab
+@persist NoProp Slide OldSlide AlreadySlid SlideCoolDown
+@persist Fences:table FenceClimb [Fence Fence1 Fence2]:entity
+if(first()){
+    #Change to 1 to parkour in metastruct lobby
+    NoProp=0
+    #
+    Fences["models/props_c17/fence03a.mdl",string]="models/hunter/plates/plate075x5.mdl"
+    Fences["models/props_c17/fence02b.mdl",string]="models/hunter/plates/plate075x105.mdl"
+    Fences["models/props_c17/fence02a.mdl",string]="models/hunter/plates/plate075x3.mdl"
+    Fences["models/props_c17/fence01b.mdl",string]="models/hunter/plates/plate075x105.mdl"
+    Fences["models/props_c17/fence01a.mdl",string]="models/hunter/plates/plate075x3.mdl"
+    runOnTick(1)
+    runOnKeys(owner(),1)
+    if(!NoProp){
+        E=propSpawn("models/props_junk/sawblade001a.mdl",entity():pos()-vec(0,0,5),ang(),1)
+        E:setAlpha(0)
+    }
+    holoCreate(0)
+    holoScale(0,vec())
+    runOnLast(1)
+    holoCreate(1)
+    holoScale(1,vec())
+    TargetVel=vec()
+    runOnChat(1)
+    hint("Say !ParkourHelp to view the instructions",7)
+    Ground=WallRunGround=1
+    Ref=holoEntity(0)
+}
+if(chatClk(owner())){
+    S=lastSaid():lower():replace(" ","")
+    if(S=="!helpparkour"|S=="!parkourhelp"){
+        print("Walk up to a wall and jump to wall climb")
+        print("While wall climbing, face the direction you want to go and jump again to wall jump")
+        print("You can ledge grab if you jump to a platform in front of you but don't make it on")
+        print("Crouching will allow you to slide down slopes and stop ledge grabbing")
+        print("You can wallrun by running along a wall and holding A or D and jump to start")
+        print("Crouch to stop wallrunning and ledge grabbing")
+        print("Hold SHIFT+CONTROL to slide")
+    }
+}
+if(keyClkPressed()=="space"){Space=!Space}
+Duck=owner():keyDuck()
+holoAng(0,owner():eyeAngles()*ang(0,1,0))
+if(!owner():vehicle():isValid()){
+#Ledge Grab
+if(owner():vel():z()<10+90*NoProp&!Duck){
+    V=owner():pos()+vec(0,0,72)+Ref:forward()*45
+    R1=rangerOffset(72/2,V,vec(0,0,-1))
+    R2=rangerOffset(45,owner():pos()+vec(0,0,72)+Ref:forward()*10,Ref:forward())
+    if(R1:hit()&R1:entity()!=owner()&!R2:hit()){
+        Go=1
+        if(NoProp){
+            owner():applyPlayerForce(-owner():vel()*vec(0.2,0.2,0)+vec(0,0,300*Space+clamp(-owner():vel():z(),0,500)))
+        }else{E:setPos(owner():pos()-vec(0,0,1))}
+        LedgeGrab=1
+        SlideCoolDown=1
+    }
+}elseif(Go){
+    Go=LedgeGrab=0
+    E:setPos(entity():pos()-vec(0,0,5))
+    timer("slidecooldown",500)
+    Fence1:propDelete()
+    Fence2:propDelete()
+}
+if(!E:isValid()&!NoProp){selfDestruct()}
+if(last()){propDeleteAll()}
+if(!OldDuck&Duck&owner():keyForward()){
+    Vel=Ref:forward()*100
+}
+if(clk("slidecooldown")){SlideCoolDown=0}
+#Slide
+Slide=(owner():keySprint()&owner():keyDuck())
+if(Duck&!SlideCoolDown){
+    if(changed(Duck)){timer("slide",500)}
+    if(Slide&!OldSlide&!AlreadySlid){Vel=owner():eye()*200*vec(1,1,0) AlreadySlid=1 stoptimer("slide")}
+    R1=rangerOffset(35,owner():pos()+Ref:forward()*15-vec(0,0,2),vec(0,0,-1))
+    R2=rangerOffset(35,owner():pos()-Ref:forward()*15-vec(0,0,2),vec(0,0,-1))
+    I=R1:distance()-R2:distance()
+    if(I>0&R1:hit()&R2:hit()&R1:entity()!=owner()&R2:entity()!=owner()){
+        TargetVel=(Ref:forward()+vec(0,0,-0.5))*I*50
+    }else{TargetVel=vec()}
+    V=TargetVel-Vel
+    Vel+=V/V:length()*5
+    V=Vel*((R1:hit()+R2:hit())/2)
+    if(V:length()>6){owner():applyPlayerForce(V)}
+}elseif(OldDuck){Vel=vec() TargetVel=vec() AlreadySlid=0 stoptimer("slide")}
+if(clk("slide")){AlreadySlid=1}
+#}else{Vel=owner():vel()*vec(1,1,0)}
+#Wall climb
+if(!Duck){
+    if(WallJump&owner():isOnGround()){WallJump=0}
+    if(Wall){
+        if(!Space&!WallJump){WallJumpReady=1}
+        if(Space&!WallJump&WallJumpReady){
+            WallJump=1
+            owner():applyPlayerForce(owner():eye()*vec(1,1,0.5)*300)
+        }
+        if(owner():isOnGround()){Wall=WallJump=0 JumpVel=vec() Ground=1}
+    }else{
+        R=rangerOffset(35,owner():pos()+vec(0,0,72)+Ref:forward()*10,Ref:forward())
+        if((R:hit()|!R:pos():isInWorld())&R:entity()!=owner()&Space&Ground){
+            if(R:entity():model():find("models/props_c17/fence0")){
+                S=Fences[R:entity():model(),string]
+                Fence=R:entity()
+                Fence1=propSpawn(S,Fence:toWorld(-Fence:boxCenter()+Fence:boxSize()*vec(0.5,0,0.5)),Fence:angles(),1)
+                Fence2=propSpawn(S,Fence:toWorld(-Fence:boxCenter()+Fence:boxSize()*vec(-0.5,0,0.5)),Fence:angles(),1)
+                Fence1:setPos(Fence1:toWorld(-Fence1:boxCenter()+Fence1:boxSize()*vec(0.25,0,-0.5)))
+                Fence2:setPos(Fence2:toWorld(-Fence2:boxCenter()+Fence2:boxSize()*vec(-0.25,0,-0.5)))
+                noCollideAll(Fence1,1)
+                noCollideAll(Fence2,1)
+                Fence1:propDraw(0)
+                Fence2:propDraw(0)
+                FenceClimb=1
+            }
+            Ground=WallJumpReady=WallJump=0
+            Wall=1
+            owner():applyPlayerForce(vec(0,0,150))
+        }
+    }
+}
+#Wall run
+if(!Duck){
+    if((owner():keyPressed("a")|owner():keyPressed("d"))&owner():keyPressed("w")){
+        if(WallRun){
+            if(owner():keyPressed("a")){
+                R=rangerOffset(35,owner():pos()+vec(0,0,72)-Ref:right()*10,-Ref:right())
+            }elseif(owner():keyPressed("d")){
+                R=rangerOffset(35,owner():pos()+vec(0,0,72)+Ref:right()*10,Ref:right())
+            }
+            if((R:hit()|!R:pos():isInWorld())&R:entity()!=owner()){
+                Distance--
+                X=50-Distance
+                #Y=-0.0505*X^2+2.2308*X-2.1803
+                #Y=-0.0496*X^2+2.2216*X-2.1720
+                Y=0.0017*X^3-0.1688*X^2+3.8868*X-3.7198
+                owner():applyPlayerForce(vec(0,0,clamp(-owner():vel():z(),0,9999)+Y))
+            }
+            if(owner():isOnGround()|Distance<=0|(owner():vel()*vec(1,1,0)):length()<10){
+                #WallRunGround=1
+                WallRun=0
+            }
+        }elseif(Space){
+            if(owner():keyPressed("a")){
+                R=rangerOffset(35,owner():pos()+vec(0,0,72)-Ref:right()*10,-Ref:right())
+            }elseif(owner():keyPressed("d")){
+                R=rangerOffset(35,owner():pos()+vec(0,0,72)+Ref:right()*10,Ref:right())
+            }
+            if((R:hit()|!R:pos():isInWorld())&R:entity()!=owner()&Space&(WallRunGround|owner():isOnGround())){
+                WallRunGround=0
+                WallRun=1
+                Distance=50
+            }
+        }
+        if((changed(Space)|owner():isOnGround())){WallRunGround=(owner():isOnGround()&!LedgeGrab)}
+    }
+}
+}
+OldDuck=Duck
+OldSlide=Slide

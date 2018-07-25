@@ -1,0 +1,6 @@
+@inputs DoGive:number Ply:entity Amnt:number
+
+runOnTick(100)
+if (DoGive==1 && Ply:isValid()) {
+    moneyGive(Ply, Amnt)
+}

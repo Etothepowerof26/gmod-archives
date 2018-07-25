@@ -1,0 +1,14 @@
+@name Group Chat (2k18) Version (Client)
+@persist TempArray:array EnableSounds:string
+
+if(first()){EnableSounds = "Yes" # Yes | No
+    if(convarnum("wire_expression2_concmd") != 1 & EnableSounds == "Yes"){hint("wire_expression_concmd 1 >> in console to enable sounds.",5)}
+}
+
+hideChat(1)
+
+runOnTick(1), runOnChat(1), if(first()){dsJoinGroup("PTqg2h1QjfdW6tk="), dsJoinGroup(entity():toString()), dsSetScope(2)}
+if(changed(chatClk(owner())) & chatClk(owner()) != 0){
+    if(owner():lastSaid():left(2) == "-c"){hideChat(1)}
+    if(owner():lastSaid() == "join"){hideChat(1), dsSend("JoinReq","PTqg2h1QjfdW6tk=",array(entity(),owner()))}
+}, if(changed(dsClk()) & dsClk("Msg")){TempArray = array(), for(I = 1,dsGetArray():count(),1){if(I % 2){TempArray:pushVector(dsGetArray()[I,vector])} else {TempArray:pushString(dsGetArray()[I,string])}}, printColor(TempArray), if(EnableSounds == "Yes"){concmd("play ambient/misc/windchime2.wav")}}

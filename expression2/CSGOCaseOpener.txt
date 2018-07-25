@@ -1,0 +1,639 @@
+@name CSGOCaseOpener
+@inputs EGP:wirelink EGP2:wirelink User:entity FindPly
+@outputs X Y Kage:string
+@persist O Time Array:array Temp PriceArray:array Player:entity SideA SideB Money MoneyOld BaseHeight ABlock BBlock CBlock DBlock Speed Random KeyPrice First AItem:string AMaterial:string BItem:string BMaterial:string CItem:string CMaterial:string DItem:string DMaterial:string Paid
+@trigger
+ 
+interval(100)
+Screen = entity():isWeldedTo()
+entity():createWire(Screen,"EGP","wirelink")
+#entity():createWire(Screen,"User","User")
+PriceArray = array(0,3400,4900,6100,7120,7800,8400,8900,9100,9610,9750,9850,9125,9975,10000)
+KeyPrice=50000
+
+
+if(First == 0) {
+    First = 1
+    Paid = 0
+    ABlock=0
+    BBlock=127
+    CBlock=254
+    DBlock=381
+    BaseHeight=155
+    Array = array("vgui/entities/weapon_mad_knife","vgui/gfx/vgui/awp","vgui/gfx/vgui/m4a1","vgui/gfx/vgui/scout","vgui/gfx/vgui/p90","vgui/gfx/vgui/aug","vgui/gfx/vgui/xm1014","vgui/gfx/vgui/galil","vgui/gfx/vgui/ak47","vgui/gfx/vgui/famas","vgui/entities/weapon_mad_deagle","vgui/gfx/vgui/usp45","vgui/entities/weapon_mad_dual","vgui/gfx/vgui/glock18","vgui/gfx/vgui/p228")
+    
+    
+    Speed=random(124.76,126.76)
+    #Min Speed = 124.76
+    #Max Speed = 126.76
+    EGP:egpBox(1,vec2(500,500),vec2(1000,1000))
+    EGP:egpColor(1,vec(16,24,35))
+    EGP:egpBox(2,vec2(256,170),vec2(400,170))
+    EGP:egpColor(2,vec(35,42,46))
+    EGP:egpBox(3,vec2(256,170),vec2(395,165))
+    EGP:egpColor(3,vec(22,22,22))
+    
+    EGP:egpBox(4,vec2(256,300),vec2(395,50)) 
+    EGP:egpColor(4,vec(79,113,35))
+    EGP:egpText(5,"Buy Key " + KeyPrice + "$",vec2(80,285))
+    EGP:egpSize(5,30)
+    
+    
+    
+    EGP:egpText(6,"P228: " + floor(KeyPrice/9) + "$ - " + floor(KeyPrice/8) + "$",vec2(30,350))
+    EGP:egpSize(6,15)
+    EGP:egpText(7,"Glock: " + floor(KeyPrice/7) + "$ - " + floor(KeyPrice/6) + "$",vec2(30,370))
+    EGP:egpSize(7,15)
+    EGP:egpText(8,"Dual-Berettes: " + floor(KeyPrice/5) + "$ - " + floor(KeyPrice/5) + "$",vec2(30,390))
+    EGP:egpSize(8,15)
+    EGP:egpText(9,"USP: " + floor(KeyPrice/4) + "$ - " + floor(KeyPrice/3) + "$",vec2(30,410))
+    EGP:egpSize(9,15)
+    EGP:egpText(16,"Deagle: " + floor(KeyPrice/2) + "$ - " + floor(KeyPrice/2) + "$",vec2(30,430))
+    EGP:egpSize(16,15)
+    
+    EGP:egpText(17,"Famas: " + floor(KeyPrice*1.0) + "$ - " + floor(KeyPrice*1.30) + "$",vec2(30,450))
+    EGP:egpSize(17,15)
+    EGP:egpText(18,"AK47: " + floor(KeyPrice*1.30) + "$ - " + floor(KeyPrice*1.60) + "$",vec2(30,470))
+    EGP:egpSize(18,15)
+    EGP:egpText(19,"Galil: " + floor(KeyPrice*1.60) + "$ - " + floor(KeyPrice*1.90) + "$",vec2(30,490))
+    EGP:egpSize(19,15)
+    EGP:egpText(26,"XM1014: " + floor(KeyPrice*2) + "$ - " + floor(KeyPrice*2.3) + "$",vec2(225,350))
+    EGP:egpSize(26,15)
+    
+    EGP:egpText(28,"AUG: " + floor(KeyPrice*3) + "$ - " + floor(KeyPrice*4) + "$",vec2(225,370))
+    EGP:egpSize(28,15)
+    EGP:egpText(29,"P90: " + floor(KeyPrice*4) + "$ - " + floor(KeyPrice*5) + "$",vec2(225,390))
+    EGP:egpSize(29,15)
+    EGP:egpText(36,"Scout: " + floor(KeyPrice*5) + "$ - " + floor(KeyPrice*6) + "$",vec2(225,410))
+    EGP:egpSize(36,15) 
+      
+    EGP:egpText(39,"M4A1: " + floor(KeyPrice*8) + "$ - " + floor(KeyPrice*12) + "$",vec2(225,430))
+    EGP:egpSize(39,15)
+    EGP:egpText(46,"AWP: " + floor(KeyPrice*12) + "$ - " + floor(KeyPrice*15) + "$",vec2(225,450))
+    EGP:egpSize(46,15)   
+    
+    EGP:egpText(47,"Knife: " + floor(KeyPrice*30) + "$ - " + floor(KeyPrice*70) + "$",vec2(225,470))
+    EGP:egpSize(47,15)   
+ 
+    
+    EGP:egpColor(6,vec(45,62,150))
+    EGP:egpColor(7,vec(45,62,150))
+    EGP:egpColor(8,vec(45,62,150))
+    EGP:egpColor(9,vec(45,62,150))
+    EGP:egpColor(16,vec(45,62,150))
+ 
+    EGP:egpColor(17,vec(103,66,161))
+    EGP:egpColor(18,vec(103,66,161))
+    EGP:egpColor(19,vec(103,66,161))
+    EGP:egpColor(26,vec(103,66,161))
+ 
+    EGP:egpColor(28,vec(184,42,126))
+    EGP:egpColor(29,vec(184,42,126))
+    EGP:egpColor(36,vec(184,42,126))
+    
+    EGP:egpColor(39,vec(184,41,41))
+    EGP:egpColor(46,vec(184,41,41))
+    
+    EGP:egpColor(47,vec(180,180,2))
+ 
+ 
+}
+ 
+#if (X>75&450>X&Y>275&Y<375) {
+        
+    if (Paid==0 && FindPly==1) {
+        moneyRequest(User,KeyPrice,3)
+    }
+    if (moneyClk()) {
+        ABlock=0
+        BBlock=127
+        CBlock=254
+        DBlock=381
+        soundPlay(1,3,"bot/alright_lets_do_this.wav")
+        Speed=random(124.76,126.76)
+        Paid=1
+    }
+ 
+ 
+  #EGP:egpBox(51,vec2(0,170),vec2(120,170))
+  #EGP:egpBox(50,vec2(512,170),vec2(120,170))
+    
+    
+ 
+if (Paid == 1) {
+EGP:egpBox(10,vec2(ABlock,BaseHeight),vec2(100,100))
+EGP:egpColor(10,vec(180,180,180))
+EGP:egpBox(11,vec2(ABlock,BaseHeight),vec2(100,100))
+EGP:egpMaterial(11,AMaterial)
+EGP:egpBox(12,vec2(ABlock,BaseHeight+60),vec2(100,30))
+EGP:egpText(130,AItem,vec2(ABlock-45,BaseHeight+50))
+EGP:egpColor(130,vec(255,255,255))
+EGP:egpSize(130,15)
+ 
+EGP:egpBox(20,vec2(BBlock,BaseHeight),vec2(100,100))
+EGP:egpColor(20,vec(180,180,180))
+EGP:egpBox(21,vec2(BBlock,BaseHeight),vec2(100,100))
+EGP:egpMaterial(21,BMaterial)
+EGP:egpBox(22,vec2(BBlock,BaseHeight+60),vec2(100,30))
+EGP:egpText(23,BItem,vec2(BBlock-45,BaseHeight+50))
+EGP:egpColor(23,vec(255,255,255))
+EGP:egpSize(23,15)
+ 
+EGP:egpBox(30,vec2(CBlock,BaseHeight),vec2(100,100))
+EGP:egpColor(30,vec(180,180,180))
+EGP:egpBox(31,vec2(CBlock,BaseHeight),vec2(100,100))
+EGP:egpMaterial(31,CMaterial)
+EGP:egpBox(32,vec2(CBlock,BaseHeight+60),vec2(100,30))
+EGP:egpText(33,CItem,vec2(CBlock-45,BaseHeight+50))
+EGP:egpColor(33,vec(255,255,255))
+EGP:egpSize(33,15)
+ 
+EGP:egpBox(40,vec2(DBlock,BaseHeight),vec2(100,100))
+EGP:egpColor(40,vec(180,180,180))
+EGP:egpBox(41,vec2(DBlock,BaseHeight),vec2(100,100))
+EGP:egpMaterial(41,DMaterial)
+EGP:egpBox(42,vec2(DBlock,BaseHeight+60),vec2(100,30))
+EGP:egpText(43,DItem,vec2(DBlock-45,BaseHeight+50))
+EGP:egpColor(43,vec(255,255,255))
+EGP:egpSize(43,15)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Speed=Speed*0.98
+if (Speed < 10) {Speed=Speed*0.98}
+if (Speed < 1) {
+    Speed=0
+    #hint(toString(ABlock),5)1
+}
+O++ 
+ 
+if (ABlock < 0) {
+    Random = ceil(random(0,10000))
+    if (Random < 10001) {
+        EGP:egpColor(12,vec(180,180,2))
+        AItem = "Knife"
+        AMaterial = Array[1,string]
+        
+    }
+    if (Random < PriceArray[14,number]) {
+        EGP:egpColor(12,vec(184,41,41))
+        AItem = "AWP"
+        AMaterial = Array[2,string]
+         
+    }    
+    if (Random < PriceArray[13,number]) {
+        EGP:egpColor(12,vec(184,41,41))
+        AItem = "M4A1"
+        AMaterial = Array[3,string]
+        
+ 
+    }
+    if (Random < PriceArray[12,number]) {
+        EGP:egpColor(12,vec(184,42,126))
+        AItem = "Scout"
+        AMaterial = Array[4,string]
+        
+        
+    }
+    if (Random < PriceArray[11,number]) {
+        EGP:egpColor(12,vec(184,42,126))
+        AItem = "P90"
+        AMaterial = Array[5,string]
+        
+         
+    }
+    if (Random < PriceArray[10,number]) {
+        EGP:egpColor(12,vec(184,42,126))
+        AItem = "AUG"
+        AMaterial = Array[6,string]
+        
+        
+    }  
+    if (Random < PriceArray[9,number]) {
+        EGP:egpColor(12,vec(103,66,161))
+        AItem = "XM1014"
+        AMaterial = Array[7,string]
+        
+       
+    }  
+    if (Random < PriceArray[8,number]) {
+        EGP:egpColor(12,vec(103,66,161))
+        AItem = "Galil"
+        AMaterial = Array[8,string]
+    }  
+    if (Random < PriceArray[7,number]) {
+        EGP:egpColor(12,vec(103,66,161))
+        AItem = "AK47"
+        AMaterial = Array[9,string]
+        
+    }       
+    if (Random < PriceArray[6,number]) {
+        EGP:egpColor(12,vec(103,66,161))
+        AItem = "Famas"
+        AMaterial = Array[10,string]
+  }     
+    if (Random < PriceArray[5,number]) {
+        EGP:egpColor(12,vec(45,62,150))
+        AItem = "Desert Eagle"
+        AMaterial = Array[11,string]
+        
+    }     
+    if (Random < PriceArray[4,number]) {
+        EGP:egpColor(12,vec(45,62,150))
+        AItem = "USP"
+        AMaterial = Array[12,string]
+         
+    }     
+    if (Random < PriceArray[3,number]) {
+        EGP:egpColor(12,vec(45,62,150))
+        AItem = "Dual-Berettes"
+        AMaterial = Array[13,string]
+        
+    }    
+    if (Random < PriceArray[2,number]) {
+        EGP:egpColor(12,vec(45,62,150))
+        AItem = "Glock"
+        AMaterial = Array[14,string]
+        
+    }
+    if (Random < PriceArray[1,number]) {
+        EGP:egpColor(12,vec(45,62,150))
+        AItem = "P228"
+        AMaterial = Array[15,string]
+        
+    }     
+    
+    ABlock=ABlock+512
+    AColor = vec(197,192,8)
+    
+}
+# BBlock
+if (BBlock < 0) {
+    Random = ceil(random(0,10000))
+    if (Random < 10000) {
+        EGP:egpColor(22,vec(180,180,2))
+        BItem = "Knife"
+        BMaterial = Array[1,string]
+        
+    }
+    if (Random < 9975) {
+        EGP:egpColor(22,vec(184,41,41))
+        BItem = "AWP"
+        BMaterial = Array[2,string]
+        
+    }    
+    if (Random < 9900) {
+        EGP:egpColor(22,vec(184,41,41))
+        BItem = "M4A1"
+        BMaterial = Array[3,string]
+        
+    }
+    if (Random < 9800) {
+        EGP:egpColor(22,vec(184,42,126))
+        BItem = "Scout"
+        BMaterial = Array[4,string]
+        
+    }
+    if (Random < 9650) {
+        EGP:egpColor(22,vec(184,42,126))
+        BItem = "P90"
+        BMaterial = Array[5,string]
+         
+    }
+    if (Random < 9450) {
+        EGP:egpColor(22,vec(184,42,126))
+        BItem = "AUG"
+        BMaterial = Array[6,string]
+        
+    }  
+    if (Random < 9200) {
+        EGP:egpColor(22,vec(103,66,161))
+        BItem = "XM1014"
+        BMaterial = Array[7,string]
+        
+    }  
+    if (Random < 8800) {
+        EGP:egpColor(22,vec(103,66,161))
+        BItem = "Galil"
+        BMaterial = Array[8,string]
+         
+    }  
+    if (Random < 7350) {
+        EGP:egpColor(22,vec(103,66,161))
+        BItem = "AK47"
+        BMaterial = Array[9,string]
+        
+    }       
+    if (Random < 7850) {
+        EGP:egpColor(22,vec(103,66,161))
+        BItem = "Famas"
+        BMaterial = Array[10,string]
+         
+    }     
+    if (Random < 7300) {
+        EGP:egpColor(22,vec(45,62,150))
+        BItem = "Desert Eagle"
+        BMaterial = Array[11,string]
+        
+    }     
+    if (Random < 6400) {
+        EGP:egpColor(22,vec(45,62,150))
+        BItem = "USP"
+        BMaterial = Array[12,string]
+        
+    }     
+    if (Random < 5200) {
+        EGP:egpColor(22,vec(45,62,150))
+        BItem = "Dual-Berettes"
+        BMaterial = Array[13,string]
+        
+    }    
+    if (Random < 3700) {
+        EGP:egpColor(22,vec(45,62,150))
+        BItem = "Glock"
+        BMaterial = Array[14,string]
+        
+    }
+    if (Random < 2000) {
+        EGP:egpColor(22,vec(45,62,150))
+        BItem = "P228"
+        BMaterial = Array[15,string]
+        
+    }     
+    
+    BBlock=BBlock+512
+    BColor = vec(197,192,8)
+    
+}
+# CClock
+if (CBlock < 0) {
+    Random = ceil(random(0,10000))
+    if (Random < 10075) {
+        EGP:egpColor(32,vec(180,180,2))
+        CItem = "Knife"
+        CMaterial = Array[1,string]
+        
+    }
+    if (Random < 9975) {
+        EGP:egpColor(32,vec(184,41,41))
+        CItem = "AWP"
+        CMaterial = Array[2,string]
+        
+    }    
+
+    if (Random < 9900) {
+        EGP:egpColor(32,vec(184,41,41))
+        CItem = "M4A1"
+        CMaterial = Array[3,string]
+        
+    }
+    if (Random < 9800) {
+        EGP:egpColor(32,vec(184,42,126))
+        CItem = "Scout"
+        CMaterial = Array[4,string]
+        
+    }
+    if (Random < 9650) {
+        EGP:egpColor(32,vec(184,42,126))
+        CItem = "P90"
+        CMaterial = Array[5,string]
+         
+    }
+    if (Random < 9450) {
+        EGP:egpColor(32,vec(184,42,126))
+        CItem = "AUG"
+        CMaterial = Array[6,string]
+        
+    }  
+    if (Random < 9200) {
+        EGP:egpColor(32,vec(103,66,161))
+        CItem = "XM1014"
+        CMaterial = Array[7,string]
+        
+    }  
+    if (Random < 8800) {
+        EGP:egpColor(32,vec(103,66,161))
+        CItem = "Galil"
+        CMaterial = Array[8,string]
+         
+    }  
+    if (Random < 7350) {
+        EGP:egpColor(32,vec(103,66,161))
+        CItem = "AK47"
+        CMaterial = Array[9,string]
+        
+    }       
+    if (Random < 7850) {
+        EGP:egpColor(32,vec(103,66,161))
+        CItem = "Famas"
+        CMaterial = Array[10,string]
+         
+    }     
+    if (Random < 7300) {
+        EGP:egpColor(32,vec(45,62,150))
+        CItem = "Desert Eagle"
+        CMaterial = Array[11,string]
+        
+    }     
+    if (Random < 6400) {
+        EGP:egpColor(32,vec(45,62,150))
+        CItem = "USP"
+        CMaterial = Array[12,string]
+        
+    }     
+    if (Random < 5200) {
+        EGP:egpColor(32,vec(45,62,150))
+        CItem = "Dual-Berettes"
+        CMaterial = Array[13,string]
+        
+    }    
+    if (Random < 3700) {
+        EGP:egpColor(32,vec(45,62,150))
+        CItem = "Glock"
+        CMaterial = Array[14,string]
+        
+    }
+    if (Random < 2000) {
+        EGP:egpColor(32,vec(45,62,150))
+        CItem = "P228"
+        CMaterial = Array[15,string]
+        
+    }     
+    
+    CBlock=CBlock+512
+    CColor = vec(197,192,8)
+    
+}
+#DBLock
+if (DBlock < 0) {
+    Random = ceil(random(0,10000))
+    if (Random < 10001) {
+        EGP:egpColor(42,vec(180,180,2))
+        DItem = "Knife"
+        DMaterial = Array[1,string]
+         
+    }
+    if (Random < 9950) {
+        EGP:egpColor(42,vec(184,41,41))
+        DItem = "AWP"
+        DMaterial = Array[2,string]
+        
+    }    
+    if (Random < 9900) {
+        EGP:egpColor(42,vec(184,41,41))
+        DItem = "M4A1"
+        DMaterial = Array[3,string]
+         
+    }
+    if (Random < 9800) {
+        EGP:egpColor(42,vec(184,42,126))
+        DItem = "Scout"
+        DMaterial = Array[4,string]
+ 
+    }
+    if (Random < 9650) {
+        EGP:egpColor(42,vec(184,42,126))
+        DItem = "P90"
+        DMaterial = Array[5,string]
+        
+    }
+    if (Random < 9450) {
+        EGP:egpColor(42,vec(184,42,126))
+        DItem = "AUG"
+        DMaterial =Array[6,string]
+
+        
+    }  
+    if (Random < 9200) {
+        EGP:egpColor(42,vec(103,66,161))
+        DItem = "XM1014"
+        DMaterial =Array[7,string]
+        
+    }  
+    if (Random < 8800) {
+        EGP:egpColor(42,vec(103,66,161))
+        DItem = "Galil"
+        DMaterial = Array[8,string]
+         
+    }  
+    if (Random < 7350) {
+        EGP:egpColor(42,vec(103,66,161))
+        DItem = "AK47"
+        DMaterial = Array[9,string]
+         
+    }       
+    if (Random < 7850) {
+        EGP:egpColor(42,vec(103,66,161))
+        DItem = "Famas"
+        DMaterial =Array[10,string]
+        
+    }     
+    
+    if (Random < 7300) {
+        EGP:egpColor(42,vec(45,62,150))
+        DItem = "Desert Eagle"
+        DMaterial = Array[11,string]
+         
+    }     
+    if (Random < 6400) {
+        EGP:egpColor(42,vec(45,62,150))
+        DItem = "USP"
+        DMaterial = Array[12,string]
+        
+    }     
+    if (Random < 5200) {
+        EGP:egpColor(42,vec(45,62,150))
+        DItem = "Dual-Berettes"
+        DMaterial = Array[13,string]
+        
+    }    
+    if (Random < 3700) {
+        EGP:egpColor(42,vec(45,62,150))
+        DItem = "Glock"
+        DMaterial = Array[14,string]
+        
+    }
+    if (Random < 2000) {
+        EGP:egpColor(42,vec(45,62,150))
+        DItem = "P228"
+        DMaterial = Array[15,string]
+        
+    }     
+    
+    DBlock=DBlock+512
+    DColor = vec(197,192,8)
+    
+}
+ 
+ 
+ ABlock=ABlock-Speed
+BBlock=BBlock-Speed
+CBlock=CBlock-Speed
+DBlock=DBlock-Speed
+if(Speed==0 & Paid==1){
+    hint("Item:" + AItem,5)
+    if (AItem == "P228") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice/10,KeyPrice/8)))}
+    if (AItem == "Glock") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice/8,KeyPrice/6)))}
+    if (AItem == "Dual-Berettes") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice/6,KeyPrice/5)))}
+    if (AItem == "USP") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice/5,KeyPrice/3)))}
+    if (AItem == "Desert Eagle") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice/3,KeyPrice/2)))}
+    
+    if (AItem == "Famas") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice*1.0,KeyPrice*1.3)))}
+    if (AItem == "AK47") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice*1.3,KeyPrice*1.6)))}
+    if (AItem == "Galil") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice*1.6,KeyPrice*1.9)))}
+    if (AItem == "XM1014") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice*1.9,KeyPrice*2.3)))}
+    
+    if (AItem == "AUG") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice*3,KeyPrice*4)))}
+    if (AItem == "P90") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice*4,KeyPrice*5)))}
+    if (AItem == "Scout") {moneyGive(moneyClkPlayer(),floor(random(KeyPrice*5,KeyPrice*6)))}
+        
+    if (AItem == "M4A1") {
+        moneyGive(moneyClkPlayer(),floor(random(KeyPrice*8,KeyPrice*12)))
+        Temp = random(KeyPrice*8,KeyPrice*12)
+        moneyGive(moneyClkPlayer(),floor(Temp))
+        concmd("say /advert " + moneyClkPlayer():name() + " has just gotten a M4A1, worth " + floor(Temp) + "$")
+    }
+    if (AItem == "AWP") {
+        Temp = random(KeyPrice*12,KeyPrice*18)
+        moneyGive(moneyClkPlayer(),floor(Temp))
+        concmd("say /advert " + moneyClkPlayer():name() + " has just gotten a AWP, worth " + floor(Temp) + "$")
+        
+    }
+    
+    if (AItem == "Knife") {
+        Temp = random(KeyPrice*75,KeyPrice*100)
+        moneyGive(moneyClkPlayer(),floor(Temp))
+        concmd("say /advert " + moneyClkPlayer():name() + " has just gotten a knife, worth " + floor(Temp) + "$")
+    }
+    
+    Paid=0
+    
+    soundPlay(5,3,"bot/great.wav")
+    
+    
+    EGP:egpBox(53,vec2(256,170),vec2(2,170))
+    EGP:egpColor(53,vec(102,51,0))
+    
+    EGP:egpBox(50,vec2(0,170),vec2(120,170))
+    EGP:egpColor(50,vec(16,24,35))
+    EGP:egpBox(51,vec2(512,170),vec2(120,170))
+    EGP:egpColor(51,vec(16,24,35))
+    }
+}
+ 
+V=EGP:egpCursor(User)
+X=floor(V:x())
+Y=floor(V:y())
+ 
+ 
+if (first() != 0) {
+    
+}
+

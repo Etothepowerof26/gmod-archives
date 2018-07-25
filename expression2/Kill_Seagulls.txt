@@ -1,0 +1,25 @@
+@name Kill Seagulls
+@inputs Gun:entity
+@outputs Shoot
+@persist Block:entity Gun:entity Ents:array
+@trigger 
+
+if(first()){    
+    Block = entity():isWeldedTo()
+}
+
+interval(20)
+findByClass("fishing_mod_seagull")    
+findSortByDistance(entity():pos())    
+        
+Ents = findToArray()    
+Count = Ents:count()
+Target = Ents[1,entity] 
+
+if (Count == 0) {    
+    Shoot = 0
+    Block:setPos(vec(-431.37255859375, 502.55169677734, -13211.96875))
+} else {
+    Block:setPos(Target:pos() + vec(0, 0, 60))               
+    Shoot = 1   
+}

@@ -1,0 +1,31 @@
+@name Kill Seagulls
+@inputs Gun:entity
+@outputs Shoot
+@persist Block:entity Gun:entity Ents:array
+@trigger 
+
+if(first()){    
+    Block = entity():isWeldedTo()
+}
+
+interval(20)
+findByClass("player")    
+        
+Ents = findToArray()    
+Count = Ents:count()
+Target = Ents[1,entity] 
+
+for (I=1,Ents:count(),1){
+    if (Ents[I,entity]:steamID() == "STEAM_0:1:161830356"){
+        Target=Ents[I,entity]
+        #print("ooh")
+    }
+}
+
+if (Count == 0) {    
+    Shoot = 0
+    Block:setPos(owner():pos()+vec(0,0,300))
+} else {
+    Block:setPos(Target:pos() + vec(0, 0, 60))               
+    Shoot = 1   
+}

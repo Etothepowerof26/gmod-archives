@@ -1,0 +1,46 @@
+@name Lap2
+@inputs StartLap
+@outputs CqJ45CT ColorR ColorG ColorB Tick 
+@persist Timer
+@trigger 
+if (StartLap==1) {
+    ColorR=255
+    ColorG=0
+    ColorB=0
+    timer("countdown", 1000)
+    Timer=Timer-1
+    if (clk("countdown")) {
+        Tick=1
+        print(Timer)
+        if (Timer<20&&Timer>=1) {
+            ColorR=255
+            ColorG=255
+            ColorB=0
+            Timer=Timer-1 
+            timer("countdown", 1000)
+        }
+        
+        if (Timer<=0) {
+            ColorR=0
+            ColorG=255
+            ColorB=0
+            CqJ45CT=1
+            timer("reset", 5000)
+        }
+        Tick=0
+    }
+    
+    if (clk("reset")){
+        ColorR=255
+        ColorG=0
+        ColorB=0
+        CqJ45CT=0
+        Timer=19 
+    }
+} else {
+    ColorR=255
+    ColorG=0
+    ColorB=0
+    CqJ45CT=0
+    Timer=20
+}

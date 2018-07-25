@@ -1,0 +1,11 @@
+@name RaceThing
+@inputs Pull
+@outputs Length:number
+@persist 
+@trigger 
+
+if (Pull==1) {
+    Length=0
+} else {
+    Length=256
+}

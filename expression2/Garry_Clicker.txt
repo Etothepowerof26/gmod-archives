@@ -1,0 +1,227 @@
+@name Garry Clicker
+@inputs Click
+@inputs KleinerBuy FreemanBuy AlyxBuy ChellBuy BarneyBuy BreenBuy EliBuy GManBuy
+@inputs Upgrade1P Upgrade2P Upgrade3P Upgrade4P Upgrade5P Upgrade6P Upgrade7P
+@inputs Buy1 Buy2 Buy3 Buy4 Buy5 Buy6 Buy7
+@outputs KleinerPay FreemanPay AlyxPay ChellPay BarneyPay BreenPay EliPay GManPay
+@outputs KleinerPrice FreemanPrice AlyxPrice ChellPrice BarneyPrice BreenPrice EliPrice GManPrice
+@outputs KleinerQTY FreemanQTY AlyxQTY ChellQTY BarneyQTY BreenQTY EliQTY GManQTY
+@outputs Garries GarriesPerSecond GarriesPerClick Speed Init
+@outputs Upgrade1B Upgrade2B Upgrade3B Upgrade4B Upgrade5B Upgrade6B Upgrade7B
+@outputs UpgradeText:string People:string SpeedUpgrade GPCUpgrade GManWind
+@persist Divisor
+@trigger 
+
+#[
+    Documentation and examples are available at:
+    https://github.com/wiremod/wire/wiki/Expression-2
+
+    Discord is available at https://discord.gg/cqJ45CT
+    Reddit is available at https://www.reddit.com/r/wiremod
+    Report any bugs you find here https://github.com/wiremod/wire/issues
+]#
+
+if (Init == 0) {
+    KleinerPrice = 15
+    FreemanPrice = 100
+    AlyxPrice = 1100
+    ChellPrice = 12000
+    BarneyPrice = 130000
+    BreenPrice = 1400000
+    EliPrice = 20000000
+    GManPrice = 330000000
+    
+    KleinerPay = 1
+    FreemanPay = 10
+    AlyxPay = 80
+    ChellPay = 470
+    BarneyPay = 2600
+    BreenPay = 14000
+    EliPay = 78000
+    GManPay = 440000
+
+    Upgrade1B = 0
+    Upgrade2B = 0
+    Upgrade3B = 0
+    Upgrade4B = 0
+    Upgrade5B = 0
+    Upgrade6B = 0
+    Upgrade7B = 0
+    
+    GPCUpgrade = 1000
+    
+    GarriesPerClick = 1
+    GarriesPerSecond = 0
+    Speed = 1000
+    SpeedUpgrade = 50000
+    
+    Init = 1
+}
+
+if (Click == 1) {
+    Garries = Garries + GarriesPerClick 
+}
+
+if (KleinerBuy == 1) {
+    if (Garries >= KleinerPrice) {
+        Garries = round(Garries - KleinerPrice)  
+        GarriesPerSecond = GarriesPerSecond + KleinerPay
+        
+        KleinerPrice = round(KleinerPrice * 1.1)
+        KleinerQTY = KleinerQTY + 1
+    }   
+}
+
+if (FreemanBuy == 1) {
+    if (Garries >= FreemanPrice) {
+        Garries = round(Garries - FreemanPrice)  
+        GarriesPerSecond = GarriesPerSecond + FreemanPay
+        
+        FreemanPrice = round(FreemanPrice * 1.1)
+        FreemanQTY = FreemanQTY + 1
+    }   
+}
+
+if (AlyxBuy == 1) {
+    if (Garries >= AlyxPrice) {
+        Garries = round(Garries - AlyxPrice)  
+        GarriesPerSecond = GarriesPerSecond + AlyxPay
+        
+        AlyxPrice = round(AlyxPrice * 1.1)
+        AlyxQTY = AlyxQTY + 1
+    }   
+}
+
+if (ChellBuy == 1) {
+    if (Garries >= ChellPrice) {
+        Garries = round(Garries - ChellPrice)  
+        GarriesPerSecond = GarriesPerSecond + ChellPay
+        
+        ChellPrice = round(ChellPrice * 1.1)
+        ChellQTY = ChellQTY + 1
+    }   
+}
+
+if (BarneyBuy == 1) {
+    if (Garries >= BarneyPrice) {
+        Garries = round(Garries - BarneyPrice)  
+        GarriesPerSecond = GarriesPerSecond + BarneyPay
+        
+        BarneyPrice = round(BarneyPrice * 1.1)
+        BarneyQTY = BarneyQTY + 1
+    }   
+}
+
+if (BreenBuy == 1) {
+    if (Garries >= BreenPrice) {
+        Garries = round(Garries - BreenPrice)  
+        GarriesPerSecond = GarriesPerSecond + BreenPay
+        
+        BreenPrice = round(BreenPrice * 1.1)
+        BreenQTY = BreenQTY + 1
+    }   
+}
+
+if (EliBuy == 1) {
+    if (Garries >= EliPrice) {
+        Garries = round(Garries - EliPrice)  
+        GarriesPerSecond = GarriesPerSecond + EliPay
+        
+        EliPrice = round(EliPrice * 1.1)
+        EliQTY = EliQTY + 1
+    }   
+}
+
+if (GManBuy == 1) {
+    if (Garries >= GManPrice) {
+        Garries = round(Garries - GManPrice)  
+        GarriesPerSecond = GarriesPerSecond + GManPay
+        
+        GManPrice = round(GManPrice * 1.1)
+        GManQTY = GManQTY + 1
+    }   
+}
+
+if (Buy1 == 1) {
+    if (Garries >= Upgrade1P) {
+        Garries = round(Garries - Upgrade1P)
+        
+        Upgrade1B = 1
+        GarriesPerSecond = GarriesPerSecond * 2   
+    }   
+}
+
+if (Buy2 == 1) {
+    if (Garries >= SpeedUpgrade) {
+        if (Speed < 125) {} else
+        {
+            Garries = Garries - SpeedUpgrade
+        
+            Speed = Speed - 25
+            SpeedUpgrade = round(SpeedUpgrade * 1.1)    
+        }
+    }   
+}
+
+if (Buy3 == 1) {
+    if (Garries >= GPCUpgrade) {
+        Garries = Garries - GPCUpgrade
+        Upgrade3B = 1
+        
+        GarriesPerClick = GarriesPerClick * 2
+        GPCUpgrade = GPCUpgrade * 2
+    }   
+}
+
+if (Buy4 == 1) {
+    if (Garries >= Upgrade4P) {
+        Garries = Garries - Upgrade4P
+        Upgrade4B = 1
+        
+        GManPrice = GManPrice / 2
+    }   
+}
+
+timer("gps+more", Speed)
+
+
+if (clk("gps+more")) {
+    if (Upgrade1B == 0) {
+        UpgradeText = "Upgrade #1: Loadsamoney! (" + Upgrade1P + ")\nDoubles your GPC.\n"
+    } else {
+        UpgradeText = "Upgrade #1: Loadsamoney! (BOUGHT)\n"
+    }
+    
+    if (Upgrade2B == 0) {
+        if (Speed < 125) {
+            UpgradeText = UpgradeText + "Upgrade #2: Speed (MAX)\nGotta go fast! (" + (Speed / 10000) + ")\n"    
+        } else {
+            UpgradeText = UpgradeText + "Upgrade #2: Speed (" + SpeedUpgrade + ")\nGotta go fast! (" + (Speed / 10000) + ")\n"    
+        }
+    }
+    
+    if (Upgrade3B == 0) {
+        UpgradeText = UpgradeText + "Upgrade #3: Macros (" + GPCUpgrade + ")\nMacros flood your imagination.\n"
+    } else {
+        UpgradeText = UpgradeText + "Upgrade #3: Macros (MAXED)\n"
+    }
+    
+    if (Upgrade4B == 0) {
+        UpgradeText = UpgradeText + "Upgrade #4: GMan Windmills (" + Upgrade4P + ")\nGMen spinning on sticks. Good game.\n"
+    } else {
+        UpgradeText = UpgradeText + "Upgrade #4: GMan Windmills (MAXED)\n" 
+    }
+    
+    People = "People: \n"
+    People = People + "Kleiners: " + KleinerQTY + "\n"
+    People = People + "Freeman: " + FreemanQTY + "\n"
+    People = People + "Alyx: " + AlyxQTY + "\n"
+    People = People + "Chell: " + ChellQTY + "\n"
+    People = People + "Barney: " + BarneyQTY + "\n"
+    People = People + "Breen: " + BreenQTY + "\n"
+    People = People + "Eli: " + EliQTY + "\n"
+    People = People + "GMan: " + GManQTY + "\n"
+    
+    Garries = Garries + GarriesPerSecond
+}
+

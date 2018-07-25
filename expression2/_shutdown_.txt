@@ -1,0 +1,45 @@
+@name Turret
+@inputs Gun:wirelink
+@outputs ShootTurret
+@persist Health EntClass:string Ents:array Count Target:entity Block:entity TurnSpeed
+@trigger 
+@model models/spacecode/sfchip.mdl
+
+runOnTick(20)
+if (first()) {
+    EntClass="npc_combine_s"
+    Name = "TaZ1k"
+    TurnSpeed=5
+    function enableShoot(){ShootTurret=1}
+    function disableShoot(){ShootTurret=0}
+    function doGetEnts(){
+        findByClass(EntClass)
+        findSortByDistance(entity():pos())
+        #findByName(Name)
+        Ents=findToArray()
+        Count=Ents:count()
+        Target=Ents[1,entity]
+    }
+    function number angle:length(){return vec(This:pitch(),This:yaw(),This:roll()):length()}
+}
+
+if (Gun) {
+    GunEnt = Gun:entity()
+    GunEnt:setPos(entity():pos()+vec(0,0,10))   
+    doGetEnts()
+    #(Target:boxCenterW()-Gun:pos()):toAngle()
+    if (Target) {
+        if (Target:health() > 1) {
+            TAng=(Target:boxCenterW()-GunEnt:pos()):toAngle()
+            Turn=GunEnt:toLocal(TAng)/GunEnt:toLocal(TAng):length()*TurnSpeed
+            GunEnt:setAng(GunEnt:toWorld(Turn))
+            enableShoot()
+            if(GunEnt:toLocal(TAng):length()<=TurnSpeed*2){Turn=ang() GunEnt:setAng(TAng)}
+        } else {
+            doGetEnts()
+        }
+    } else {
+        doGetEnts()
+        disableShoot()
+    }
+}

@@ -1,0 +1,95 @@
+@name AutoShop
+#MONEY
+@inputs CurrentAmount
+#BUTTON PRESSES
+@inputs ACRB AK47B AMD65B AN94B AUGA3B
+#VISUALS
+@outputs ACR AK47 AMD65 AN94 AUGA3
+#FIRE POT
+@outputs FirePotA FirePotB
+#FIRE USERS
+@outputs Fire1 Fire2 Fire3 Fire4 Fire5
+#PRICES
+@persist ACR AK47 AMD65 AN94 AUGA3
+@trigger 
+
+#[
+    Documentation and examples are available at:
+    https://github.com/wiremod/wire/wiki/Expression-2
+
+    Discord is available at https://discord.gg/cqJ45CT
+    Reddit is available at https://www.reddit.com/r/wiremod
+    Report any bugs you find here https://github.com/wiremod/wire/issues
+]#
+
+ACR = round(6500*1.2)
+AK47 = round(5800*1.2)
+AMD65 = round(5600*1.2)
+AN94 = round(5000*1.2)
+AUGA3 = round(6100*1.2)
+
+if (ACRB == 1 & CurrentAmount >= ACR) {
+    FirePotA = ACR
+    Fire1 = 1   
+    
+    timer("Fired", 1250)
+    timer("Clear", 100)
+    
+    if (clk("Clear")) {
+        Fire1 = 0    
+    } 
+}
+
+if (AK47B == 1 & CurrentAmount >= AK47) {
+    FirePotA = AK47
+    Fire2 = 1
+    
+    timer("Fired", 1250)
+    timer("Clear", 100)
+    
+    if (clk("Clear")) {
+        Fire2 = 0    
+    }
+}
+
+if (AMD65B == 1 & CurrentAmount >= AMD65) {
+    FirePotA = AMD65
+    Fire3 = 1  
+    
+    timer("Fired", 1250)
+    timer("Clear", 100)
+    
+    if (clk("Clear")) {
+        Fire3 = 0    
+    }
+}
+
+if (AN94B == 1 & CurrentAmount >= AN94) {
+    FirePotA = AN94
+    Fire4 = 1 
+    
+    timer("Fired", 1250)
+    timer("Clear", 100)
+    
+    if (clk("Clear")) {
+        Fire4 = 0    
+    }
+}
+
+if (AUGA3B == 1 & CurrentAmount >= AUGA3) {
+    FirePotA = AUGA3
+    Fire5 = 1 
+    
+    timer("Fired", 1250)
+    timer("Clear", 100)
+    
+    if (clk("Clear")) {
+        Fire5 = 0    
+    }
+}
+
+if (clk("Fired")) {
+    FirePotB = 1 
+    
+    FirePotB = 0
+}

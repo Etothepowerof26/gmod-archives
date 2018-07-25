@@ -1,0 +1,12 @@
+@name Control Computer
+@inputs Activate
+@outputs Active
+@persist 
+@trigger 
+@model models/props_lab/monitor02.mdl
+
+if (Activate == 1) {
+    Active = 10000   
+} else {
+    Active = 0
+}

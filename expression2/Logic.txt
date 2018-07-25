@@ -1,0 +1,31 @@
+@name Logic
+@inputs DEFAULTDIST U1 U2 B1 B2
+@outputs ONE U1O U2O B1O B2O U1V U2V B1V B2V
+@trigger 
+
+runOnTick(1)
+    
+U2O = 0
+U1O = 0
+B2O = 0
+B1O = 0
+
+ONE = 1
+
+if (U1 < DEFAULTDIST) {
+    U2O = ((U1) / 3.25) / 10
+} elseif (U1 > DEFAULTDIST) {
+    U1O = ((U2) / 3.25) / 10
+} elseif (U1 == DEFAULTDIST) {
+    U2O = 1
+    U1O = 1
+}
+
+if (B1 < DEFAULTDIST) {
+    B2O = ((B1) / 3.25) / 10
+} elseif (B1 > DEFAULTDIST) {
+    B1O = ((B2) / 3.25) / 10
+} elseif (U1 == DEFAULTDIST) {
+    B2O = 1
+    B1O = 1
+}

@@ -1,0 +1,50 @@
+@name Sorting
+@inputs EGP:wirelink
+@persist Length Max VisArray:array
+
+DivX = 2.5
+Length = 1024 / DivX
+Max = floor( Length )
+VisArray = array()
+CurrIDX = 1
+Delay = 0.1
+
+function scramble(){
+    for (I=1,floor(Length),1) {
+            VisArray:pushNumber(ceil(random(Max) + 0.5))
+    }
+    print("Scramble completed")
+}
+function swap(IDX1, IDX2){
+    Clone = VisArray[IDX2, number]
+    VisArray[IDX2,number] = VisArray[IDX1,number]
+    VisArray[IDX1,number] = Clone
+}
+function sort_reg(){
+    for (I=1,Length,1) {
+            SmallestNumberIDX = Max
+            for (K=1,Length,1) {
+                if (VisArray[K,number]<SmallestNumberIDX){
+                    SmallestNumberIDX=K
+                }
+            }
+            swap(I, SmallestNumberIDX)
+            CurrIDX = I
+    }
+    
+}
+#scramble()
+sort_reg()
+EGP:egpClear()
+#Create Boxes
+for (I=1,Length,1 * DivX) {
+    EGP:egpColor(I, 127, 127, 127, 127)
+    EGP:egpBox(I,vec2(I * DivX, Length - (Max * 0.4)),vec2(1, VisArray[I, number]))
+}
+#Create Text
+EGP:egpText(1337, "Sorting", vec2(10, 10))
+EGP:egpColor(1337, 255, 255, 255, 255)
+#Create Current IDX
+EGP:egpBox(420, vec2(CurrIDX * DivX, Length - (Max * 0.4)), vec2(1, Max))
+EGP:egpColor(420, 255, 0, 0, 127)
+

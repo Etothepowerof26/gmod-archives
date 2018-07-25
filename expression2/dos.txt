@@ -1,0 +1,40 @@
+@model models/spacecode/sfchip.mdl
+@inputs Wirelink:wirelink Memory
+@outputs Reset Clk CharParam CharX CharY Char
+
+if (first()|duped()){
+    Clk=1
+    CharParam=999
+    CharX=0
+    CharY=0
+    Rclk=1
+}
+if(Rclk==1){
+    Reset=1
+    Rclk=0
+    timer("Reset",100)
+}
+elseif(clk("Reset")){
+    Reset=0   
+}
+
+function newChar(Character){
+    if (Character != 0) {
+        Char = Character
+        CharX++ 
+        Char = toByte("s")
+    }
+}
+
+newChar(Memory)
+
+if(~Memory){
+    if(CharX>29){
+        CharX=0
+        CharY++
+        if(CharY>17){
+            CharX=0
+            CharY=0
+        }
+    }   
+}

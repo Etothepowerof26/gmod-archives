@@ -1,0 +1,17 @@
+@name Targetfinder
+@outputs Distance Target:entity Targeteee:string
+@persist
+ 
+timer("huel", 250)
+
+if (clk("huel")) {
+    findInSphere(entity():pos(),50)
+    findClosest(entity():pos())
+    findIncludeClass("player")
+        
+    Target = findResult(1)
+    Targeteee = toString(Target)
+    Distance = entity():pos():distance(Target:pos())
+    timer("huel", 250)
+}
+

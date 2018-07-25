@@ -1,0 +1,20 @@
+@name Thingy
+@inputs A
+@outputs DADADA
+@persist [E Target]:entity
+@trigger
+if (first()) {
+E = entity():isWeldedTo() #isWeldedTo will make the e2 apply the force to the prop it is welded to instead of the e2 itself.
+runOnTick(1)
+}
+
+DADADA = 0
+if (A == 1) {
+findByClass("lua_npc_wander")    
+findSortByDistance(entity():pos())    
+Ents = findToArray()    
+Count = Ents:count()    
+Target = Ents[1, entity] 
+E:applyForce(((Target:pos()+vec(0,0,45)-E:massCenter())*30-E:vel())*E:mass())
+DADADA = 1
+}

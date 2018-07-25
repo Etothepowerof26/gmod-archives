@@ -1,0 +1,88 @@
+@name JPE2
+@inputs Roll R1 R2 R3 BetI Reset Person:entity
+@outputs Vis1 Vis2 Vis3 Text:string VisBet VisCreds IsR BetO
+@persist Creds Bet IsRolling Init Val1 Val2 Val3
+@trigger 
+
+#[
+    Main Functions:
+    
+    moneyRequest(ent, val)
+    Requests a money to a entity
+    Player must be the entity.
+    
+    Ex: moneyRequest(Person, 10) will request 10 coins from the person.
+    
+    ent:moneyAmount()
+    moneyGive(ent, v)
+]#
+
+if (Init == 0) {
+    Text = "Step right up!"
+    
+    Creds = 100
+    Bet = 10
+    
+    Init = 1
+}
+
+if (Reset == 1) {
+    Init = 0   
+}
+
+if (IsRolling == 1) {
+    Text = "Rolling..."
+    Val1 = R1
+    Val2 = R2
+    Val3 = R3
+    Vis1 = Val1
+    Vis2 = Val2
+    Vis3 = Val3
+
+    timer("StopRoll", 2500)
+    
+    if (clk("StopRoll")) {
+        
+        if (Val1 == 7 & Val2 == 7 & Val3 == 7) {
+            Text = "You won the JACKPOT!!!"
+            moneyGive(Person, Bet * 5)
+        } elseif (Val1 == Val2 & Val1 == Val3 & Val2 == Val3) {
+            Text = "You won double your bet!"
+            moneyGive(Person, Bet * 2)
+        } elseif (Val1 == Val2 | Val1 == Val3 | Val2 == Val3) {
+            Text = "You recieved half of your bet back."
+            moneyGive(Person, Bet/2)
+        } else {
+            Text = "Sorry, better luck next time!"
+        }
+            
+        IsRolling = 0 
+        IsR = 0
+    }   
+}
+
+if (Roll == 1 & IsRolling == 0 & Person:moneyAmount() >= Bet) {
+    moneyRequest(Person, Bet)
+} elseif (Roll == 1 & IsRolling == 0 & Person:moneyAmount() < Bet) {
+    Text = "You do not have enough credits!"
+} elseif (Roll == 1 & IsRolling == 0 & Bet == 0) {
+    Text = "Don't expect to get something out of nothing!"
+}
+
+if (moneyClk()) {
+    IsRolling = 1
+    IsR = 1     
+}
+
+timer("Display", 200)
+
+if (clk("Display")) {
+    Bet = BetI
+    BetO = Bet
+    
+    VisBet = BetO
+    VisCreds = Creds
+    
+    timer("Display", 200)
+}
+

@@ -1,0 +1,33 @@
+@name A
+#MONEY
+@inputs CurrentAmount
+#BUTTON PRESSES
+@inputs ACRB AK47B AMD65B AN94B AUGA3B
+#VISUALS
+@outputs ACRV AK47V AMD65V AN94V AUGA3V
+#FIRE POT
+@outputs FirePot
+#PRICES
+@persist ACR AK47 AMD65 AN94 AUGA3
+@trigger 
+
+#[
+    Documentation and examples are available at:
+    https://github.com/wiremod/wire/wiki/Expression-2
+
+    Discord is available at https://discord.gg/cqJ45CT
+    Reddit is available at https://www.reddit.com/r/wiremod
+    Report any bugs you find here https://github.com/wiremod/wire/issues
+]#
+
+ACR = round(6500*1.2)
+AK47 = round(5800*1.2)
+AMD65 = round(5600*1.2)
+AN94 = round(5000*1.2)
+AUGA3 = round(6100*1.2)
+
+ACRV = ACR
+AK47V = AK47
+AMD65V = AMD65
+AN94V = AN94
+AUGA3V = AUGA3

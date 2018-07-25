@@ -1,0 +1,44 @@
+@name Something
+@inputs 
+@outputs Target:entity TargetName:string
+@persist Something IdlePos:vector
+@trigger 
+
+#[
+    Documentation and examples are available at:
+    https://github.com/wiremod/wire/wiki/Expression-2
+
+    Discord is available at https://discord.gg/cqJ45CT
+    Reddit is available at https://www.reddit.com/r/wiremod
+    Report any bugs you find here https://github.com/wiremod/wire/issues
+]#
+
+timer("huel", 250)
+
+IdlePos = entity():pos()
+
+if (clk("huel") & first()) {
+    
+    findInSphere(entity():pos(),5000)
+    findClosest(entity():pos())
+    findIncludeClass("player")
+            
+    Target = findResult(1)
+
+    if (Target) {
+        entity():setPos(Target:pos())   
+    } else {
+        entity():setPos(IdlePos)
+    }
+    
+    TargetName = toString(Target)
+    
+    print(Target)
+    
+    Distance = entity():pos():distance(Target:pos())
+    
+    timer("huel", 250)
+}
+
+
+

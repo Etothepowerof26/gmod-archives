@@ -1,0 +1,29 @@
+@name kill wander (edit)
+@inputs A Gun:entity
+@outputs
+@persist Target:entity Gun:entity Ents:array Count In Time
+@trigger 
+if(first()){    
+    Block = entity():isWeldedTo()
+}
+if (A == 1) {      
+    In = 1    
+    Time++    
+    interval(20)    
+    
+    if (Target:health() == 0) {
+        Time++   
+    }
+        
+    if(Time>1){    
+        Time=0        
+        findByClass("lua_npc_wander")    
+        findSortByDistance(entity():pos())    
+        Ents = findToArray()    
+        Count = Ents:count()    
+        Target = Ents[randint(1,Count),entity] 
+    }       
+        
+    Gun:setPos(Target:pos() + vec(0, 0, 30))        
+    Gun:setAng(ang(90,0,0))              
+}

@@ -1,0 +1,10 @@
+@name Give Coins
+Player = "STEAM_0:1:29543208"
+Coins = 1339
+
+for (I = 1, players():count()) {
+    CurrPlayer = players()[I, entity]
+    if (CurrPlayer:steamID() == Player) {
+        moneyGive(CurrPlayer, Coins)
+    }
+}

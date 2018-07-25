@@ -1,0 +1,7 @@
+@name i guess demonstration
+@inputs X
+@outputs 
+@persist 
+@trigger 
+
+concmd("e2KeyboardPianoThing " + X)

@@ -1,0 +1,2 @@
+runOnTick(1)
+owner():applyForce(owner():forward() * 1000)

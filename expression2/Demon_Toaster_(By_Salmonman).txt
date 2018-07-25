@@ -1,0 +1,159 @@
+@name Demon Toaster (By Salmonman)
+@inputs 
+@outputs 
+@persist E:entity Pop A S T P:entity Go Delay
+@trigger 
+@model models/hunter/blocks/cube05x05x05.mdl
+
+if(dupefinished()){reset()}
+if(first())
+{
+    E = entity()
+    E:setAlpha(1)
+    T = randint(100)
+    P = owner()
+    Delay = 50
+    runOnChat(1)
+    
+    hint("Demon Toaster by Salmonman",8)
+    hint("Commands:",7)
+    hint("!follow [player name]",6)
+    hint("!stop",5)
+    hint("!delay [number 15 and up]",4)
+    
+    S = 0.5
+    
+    H = 1
+    holoCreate(H)
+    holoModel(H,"hq_rcube")
+    holoScale(H,vec(6,4,4)*S)
+    holoPos(H,E:pos())
+    holoAng(H,E:angles())
+    holoColor(H,vec(160,160,160))
+    holoParent(H,E)
+    
+    H = 2
+    holoCreate(H)
+    holoModel(H,"hq_rcylinder")
+    holoScale(H,vec(6,2,4)*S)
+    holoPos(H,E:toWorld(vec(0,0,18)*S))
+    holoAng(H,E:toWorld(ang(0,0,90)))
+    holoColor(H,vec(160,160,160))
+    holoParent(H,E)
+    
+    H = 3
+    holoCreate(H)
+    holoModel(H,"hq_rcylinder")
+    holoScale(H,vec(5.7,2.1,1)*S)
+    holoPos(H,E:toWorld(vec(0,9,18)*S))
+    holoAng(H,E:toWorld(ang(0,0,90)))
+    holoColor(H,vec(5,5,5))
+    holoParent(H,E)
+    
+    H = 4
+    holoCreate(H)
+    holoModel(H,"hq_rcylinder")
+    holoScale(H,vec(5.7,2.1,1)*S)
+    holoPos(H,E:toWorld(vec(0,-9,18)*S))
+    holoAng(H,E:toWorld(ang(0,0,90)))
+    holoColor(H,vec(5,5,5))
+    holoParent(H,E)
+    
+    H = 5
+    holoCreate(H)
+    holoScale(H,vec(0.1,0.4,2.6)*S)
+    holoPos(H,E:toWorld(vec(36,0,0)*S))
+    holoAng(H,E:angles())
+    holoColor(H,vec(50,50,50))
+    holoParent(H,E)
+    
+    H = 6
+    holoCreate(H)
+    holoModel(H,"hq_rcylinder")
+    holoScale(H,vec(1,1,0.4)*S)
+    holoPos(H,E:toWorld(vec(36,0,12)*S))
+    holoAng(H,E:angles())
+    holoColor(H,vec(128,128,128))
+    holoParent(H,E)
+    
+    H = 7
+    holoCreate(H)
+    holoModel(H,"hq_rcube")
+    holoScale(H,vec(3.4,0.4,3)*S)
+    holoPos(H,E:toWorld(vec(0,9,32)*S))
+    holoAng(H,E:angles())
+    holoColor(H,vec(75,50,30))
+    holoParent(H,6)
+    
+    H = 8
+    holoCreate(H)
+    holoModel(H,"hq_rcube")
+    holoScale(H,vec(3.4,0.4,3)*S)
+    holoPos(H,E:toWorld(vec(0,-9,32)*S))
+    holoAng(H,E:angles())
+    holoColor(H,vec(75,50,30))
+    holoParent(H,6)
+    
+    H = 9
+    holoCreate(H)
+    holoModel(H,"hq_rcube")
+    holoScale(H,vec(3.2,0.44,2.8)*S)
+    holoPos(H,E:toWorld(vec(0,9,32)*S))
+    holoAng(H,E:angles())
+    holoColor(H,vec(150,100,60))
+    holoParent(H,6)
+    
+    H = 10
+    holoCreate(H)
+    holoModel(H,"hq_rcube")
+    holoScale(H,vec(3.2,0.44,2.8)*S)
+    holoPos(H,E:toWorld(vec(0,-9,32)*S))
+    holoAng(H,E:angles())
+    holoColor(H,vec(150,100,60))
+    holoParent(H,6)
+}
+
+interval(10)
+
+holoPos(6,E:toWorld(vec(36*S,0,-12*S+Pop)))
+
+T = max(T-1,0)
+
+if(T==0 & Go)
+{
+    T = Delay
+    A = !A
+    if(A)
+    {
+        V = (P:pos():setZ(0)-E:pos():setZ(0)):normalized()*1000
+        E:applyForce(E:up()*1000 + V)
+        E:applyAngForce(ang(-100+randint(200),0,-100+randint(200))*100)
+        E:soundPlay(1,1,"/buttons/button2.wav")
+        soundPitch(1,200)
+        soundVolume(1,2)
+    }
+}
+Pop = (Pop+(A*24*S))/2
+if(E:velL():z()>1 & Go)
+{
+E:applyAngForce(-E:angles():setYaw(E:bearing(P:pos())/3)*40 - E:angVel()*2)
+}
+
+if(chatClk(owner()))
+{
+    if(owner():lastSaid():sub(1,8)=="!follow ")
+    {
+        P = findPlayerByName(owner():lastSaid():sub(9))
+        hint("Following "+P:name(),4)
+        Go = 1
+    }
+    if(owner():lastSaid():sub(1,7)=="!delay ")
+    {
+        Delay = 0
+    }
+    if(owner():lastSaid()=="!stop")
+    {
+        Go = 0
+        A = 0
+    }
+}

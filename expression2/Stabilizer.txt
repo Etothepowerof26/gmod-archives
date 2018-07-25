@@ -1,0 +1,14 @@
+@name Stabilizer
+
+runOnTick(1)
+Temp=entity()
+Entity=(Temp:getConstraints():count( ) > 0 ? Temp:isWeldedTo() : Temp)
+
+Angle=-Entity:angles()*15-Entity:angVel()*2
+Center=Entity:massCenter()
+Right=Entity:right()
+Forward=Entity:forward()
+Up=Entity:up()
+Entity:applyForce((vec(0,0,7)-Entity:vel())*Entity:mass())
+Leverage=Entity:inertia():length()
+#Entity:applyAngForce(Angle*Leverage)

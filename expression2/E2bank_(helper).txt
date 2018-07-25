@@ -1,0 +1,24 @@
+@name E2bank (helper)
+@inputs PlyName Amount Fire
+@outputs 
+@persist Player:entity
+@trigger 
+
+#[
+    Documentation and examples are available at:
+    https://github.com/wiremod/wire/wiki/Expression-2
+
+    Discord is available at https://discord.gg/cqJ45CT
+    Reddit is available at https://www.reddit.com/r/wiremod
+    Report any bugs you find here https://github.com/wiremod/wire/issues
+]#
+
+if (first()) {
+    runOnTick(1)
+    
+    if (Fire == 1) {
+        if (findPlayerByName(PlyName)) {
+            Player = findPlayerByName(PlyName)   
+        }
+    }
+}

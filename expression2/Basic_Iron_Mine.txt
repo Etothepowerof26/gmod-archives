@@ -1,0 +1,51 @@
+@name Basic Iron Mine
+@inputs 
+@outputs 
+@persist 
+@trigger 
+
+#[
+    Documentation and examples are available at:
+    https://github.com/wiremod/wire/wiki/Expression-2
+
+    Discord is available at https://discord.gg/cqJ45CT
+    Reddit is available at https://www.reddit.com/r/wiremod
+    Report any bugs you find here https://github.com/wiremod/wire/issues
+]#
+
+holoCreate(1,
+    entity():pos()+vec(0,0,5),
+    vec(1,1,1),
+    entity():angles(),
+    vec(100,100,100),
+    "models/hunter/blocks/cube075x1x025.mdl"
+)
+holoMaterial(1,
+    "models/debug/debugwhite"
+)
+
+holoCreate(2,
+    entity():pos()+vec(0,0,40),
+    vec(0.6,0.6,6),
+    entity():angles(),
+    vec(0,0,0),
+    "models/hunter/blocks/cube075x1x025.mdl"
+)
+holoMaterial(2,
+    "models/debug/debugwhite"
+)
+
+holoCreate(3,
+    entity():pos()+vec(0,30,67),
+    vec(0.4,1.2,1),
+    entity():angles(),
+    vec(0,0,0),
+    "models/hunter/blocks/cube075x1x025.mdl"
+)
+holoMaterial(3,
+    "models/debug/debugwhite"
+)
+
+
+
+#Entity=holoCreate(number index,vector position,vector scale,angle ang,vector color,string model)
